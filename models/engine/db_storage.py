@@ -36,7 +36,9 @@ class DBStorage():
         all objects depending of the class name (argument cls)
         """
         
-        classes = {'State': State,'City': City}
+        classes = {'User': User, 'Place': Place,
+               'State': State, 'City': City, 'Amenity': Amenity,
+               'Review': Review}
         result = {}
         if cls and cls in classes:
             cls = classes[cls]
