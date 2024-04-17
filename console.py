@@ -129,10 +129,12 @@ class HBNBCommand(cmd.Cmd):
         elif len(arguments) > 1:
             args_dict = {}
             for arg in arguments:
+                #print('arg: {}'.format(arg))
                 if '=' in arg:
                     key, value = arg.split('=')
+                    print('key: {} value: {}'.format(key, value))
                     if isinstance(value, str):
-                        value = value[1:-1].replace('"', '\\"').replace(
+                        value = value[1:-1].replace('"', '\"').replace(
                             '_', ' ')
                     elif '.' in value:
                         try:
@@ -144,8 +146,9 @@ class HBNBCommand(cmd.Cmd):
                             value = int(value)
                         except ValueError:
                             continue
-                args_dict[key] = value
-            new_instance = HBNBCommand.classes[args](**args_dict)
+                    args_dict[key] = value
+            print("dict_args before class: {}".format(args_dict))
+            new_instance = HBNBCommand.classes[arguments[0]](**args_dict)
         storage.save()
         print(new_instance.id)
         storage.save()
