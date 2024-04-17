@@ -25,9 +25,11 @@ class BaseModel:
                                                         '%Y-%m-%dT%H:%M:%S.%f')
                 del kwargs['__class__']
             else:
+                from models import storage
                 self.created_at = datetime.utcnow()
                 self.updated_at = datetime.utcnow()
                 self.id = str(uuid.uuid4())
+                storage.new(self)
 
             self.__dict__.update(kwargs)
 
