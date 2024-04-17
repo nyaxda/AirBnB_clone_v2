@@ -13,6 +13,7 @@ from models.place import Place
 from models.review import Review
 from models.amenity import Amenity
 
+
 class DBStorage():
     __engine = None
     __session = None
@@ -21,11 +22,12 @@ class DBStorage():
     mysql_pwd = os.environ.get("HBNB_MYSQL_PWD")
     mysql_host = os.environ.get("HBNB_MYSQL_HOST")
     mysql_db = os.environ.get("HBNB_MYSQL_DB")
+
     def __init__(self):
-        db_url= "mysql+mysqldb://{}:{}@{}/{}".format(self.mysql_user,
-                                                     self.mysql_pwd,
-                                                     self.mysql_host,
-                                                     self.mysql_db)
+        db_url = "mysql+mysqldb://{}:{}@{}/{}".format(self.mysql_user,
+                                                      self.mysql_pwd,
+                                                      self.mysql_host,
+                                                      self.mysql_db)
         self.__engine = create_engine(db_url, pool_pre_ping=True)
         if self.hbnb_env == 'test':
             Base.metadata.drop_all(bind=self.__engine)
@@ -35,8 +37,9 @@ class DBStorage():
         query on the current database session (self.__session)
         all objects depending of the class name (argument cls)
         """
-        
-        classes = {'State': State,'City': City}
+
+        classes = {'State': State, 'City': City,
+                   'User': User}
         result = {}
         if cls and cls in classes:
             cls = classes[cls]
@@ -59,20 +62,21 @@ class DBStorage():
         """
         self.__session.add(obj)
         self.__session.commit()
+
     def save(self):
         """
         commit all changes of the
         current database session (self.__session)
         """
         self.__session.commit()
-    
+
     def delete(self, obj=None):
         """
         delete from the current database session obj if not None
         """
         if obj:
             self.__session.delete(obj)
-    
+
     def reload(self):
         """
         create all tables in the database (feature of SQLAlchemy)
@@ -85,8 +89,11 @@ class DBStorage():
         ssion = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(ssion)
         self.__session = Session()
-        
+
     @property
     def _FileStorage__objects(self):
-        """Returns a dictionary of all objects in the format of _FileStorage__objects"""
+        """
+        Returns a dictionary of all objects
+        in the format of _FileStorage__objects
+        """
         return self.all()
