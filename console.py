@@ -115,33 +115,40 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, args):
-        """ Create an object of any class
-        Usage: create <class name> <key=value> <key=value> ...
-        """
+        """ Create an object of any class"""
         if not args:
             print("** class name missing **")
             return
-        args_list = args.split()
-        if len(args_list) == 1:
-            if args not in HBNBCommand.classes:
+        arguments = args.split()
+        if len(arguments) == 1:
+            if arguments[0] not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            new_instance = HBNBCommand.classes[args]()
-            storage.save()
-            print(new_instance.id)
+            new_instance = HBNBCommand.classes[arguments[0]]()
 
-        else:
-            _cls = args_list[0]
-            _args = args_list[1:]
-            if _cls not in HBNBCommand.classes:
-                print("** class doesn't exist **")
-                return
-            print("_cls = {}".format(_cls))
-            print("_args = {}".format(_args))
-            new_instance = HBNBCommand.classes[_cls](*_args)
-            storage.save()
-            print(new_instance.id)
-
+        elif len(arguments) > 1:
+            args_dict = {}
+            for arg in arguments:
+                if '=' in arg:
+                    key, value = arg.split('=')
+                    if isinstance(value, str):
+                        value = value[1:-1].replace('"', '\\"').replace(
+                            '_', ' ')
+                    elif '.' in value:
+                        try:
+                            value = float(value)
+                        except ValueError:
+                            continue
+                    else:
+                        try:
+                            value = int(value)
+                        except ValueError:
+                            continue
+                args_dict[key] = value
+            new_instance = HBNBCommand.classes[args](**args_dict)
+        storage.save()
+        print(new_instance.id)
+        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
@@ -336,6 +343,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
