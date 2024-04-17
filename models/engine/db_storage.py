@@ -4,6 +4,14 @@ from sqlalchemy import create_engine
 from models.base_model import Base
 from sqlalchemy.orm import sessionmaker, scoped_session
 import os
+import MySQLdb
+from models.base_model import Base
+from models.state import State
+from models.city import City
+from models.user import User
+from models.place import Place
+from models.review import Review
+from models.amenity import Amenity
 
 class DBStorage():
     __engine = None
@@ -13,13 +21,11 @@ class DBStorage():
     mysql_pwd = os.environ.get("HBNB_MYSQL_PWD")
     mysql_host = os.environ.get("HBNB_MYSQL_HOST")
     mysql_db = os.environ.get("HBNB_MYSQL_DB")
-    storage_type = os.environ.get("HBNB_TYPE_STORAGE")
-    classes = ['User', 'Place', 'State', 'City',
-               'Amenity', 'Review']
     def __init__(self):
-        
-        db_url= f"mysql+mysqldb://{
-            self.mysql_user}:{self.mysql_pwd}@{self.mysql_host}/{self.mysql_db}"
+        db_url= "mysql+mysqldb://{}:{}@{}/{}".format(self.mysql_user,
+                                                     self.mysql_pwd,
+                                                     self.mysql_host,
+                                                     self.mysql_db)
         self.__engine = create_engine(db_url, pool_pre_ping=True)
         if self.hbnb_env == 'test':
             Base.metadata.drop_all(bind=self.__engine)
@@ -29,15 +35,18 @@ class DBStorage():
         query on the current database session (self.__session)
         all objects depending of the class name (argument cls)
         """
+        
+        classes = {'State': State,'City': City}
         result = {}
-        if cls:
+        if cls and cls in classes:
+            cls = classes[cls]
             objects = self.__session.query(cls).all()
             for obj in objects:
                 key = "{}.{}".format(type(obj).__name__, obj.id)
                 result[key] = obj
         else:
-            for class_name in self.classes:
-                objects = self.__session.query(class_name).all()
+            for cls, class_obj in classes.items():
+                objects = self.__session.query(class_obj).all()
                 for obj in objects:
                     key = "{}.{}".format(type(obj).__name__, obj.id)
                     result[key] = obj
@@ -49,7 +58,7 @@ class DBStorage():
         database session (self.__session)
         """
         self.__session.add(obj)
-
+        self.__session.commit()
     def save(self):
         """
         commit all changes of the
@@ -73,5 +82,11 @@ class DBStorage():
         from models.state import State
         from models.city import City
         Base.metadata.create_all(bind=self.__engine)
-        Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
-        self.__session = scoped_session(Session)
+        ssion = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        Session = scoped_session(ssion)
+        self.__session = Session()
+        
+    @property
+    def _FileStorage__objects(self):
+        """Returns a dictionary of all objects in the format of _FileStorage__objects"""
+        return self.all()

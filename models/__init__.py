@@ -3,6 +3,8 @@
 from models.engine.file_storage import FileStorage
 from models.engine.db_storage import DBStorage
 import os
+from models.state import State
+from models.city import City
 
 storage_type = os.environ.get('HBNB_TYPE_STORAGE')
 if storage_type == 'db':

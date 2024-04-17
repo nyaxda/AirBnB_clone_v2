@@ -11,7 +11,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
-
+from sqlalchemy.exc import IntegrityError
 
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
@@ -125,13 +125,16 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **")
                 return
             new_instance = HBNBCommand.classes[arguments[0]]()
+            storage.new(new_instance)
+            storage.save()
+            print(new_instance.id)
 
         elif len(arguments) > 1:
             args_dict = {}
             for arg in arguments:
                 if '=' in arg:
                     key, value = arg.split('=')
-                    if isinstance(value, str):
+                    if value[0] == '"' and value[-1] == '"':
                         value = value[1:-1].replace('"', '\"').replace(
                             '_', ' ')
                     elif '.' in value:
@@ -145,10 +148,15 @@ class HBNBCommand(cmd.Cmd):
                         except ValueError:
                             continue
                     args_dict[key] = value
-            new_instance = HBNBCommand.classes[arguments[0]](**args_dict)
-        storage.save()
-        print(new_instance.id)
-        storage.save()
+            try:
+                new_instance = HBNBCommand.classes[arguments[0]](**args_dict)
+                storage.new(new_instance)
+                storage.save()
+                print(new_instance.id)
+            except IntegrityError:
+                storage._DBStorage__session.rollback()
+                print("** integrity error")
+                return
 
     def help_create(self):
         """ Help information for the create method """
