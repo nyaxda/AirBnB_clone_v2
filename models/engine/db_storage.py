@@ -39,7 +39,7 @@ class DBStorage():
         """
 
         classes = {'State': State, 'City': City,
-                   'User': User}
+                   'User': User, 'Place': Place}
         result = {}
         if cls and cls in classes:
             cls = classes[cls]
