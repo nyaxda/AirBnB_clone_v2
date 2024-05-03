@@ -29,7 +29,7 @@ sudo chown -R ubuntu:ubuntu /data/
 printf %s "server {
     listen 80 default_server;
     listen [::]:80 default_server;
-    add_header X-Served by $HOSTNAME;
+    add_header X-Served by \$hostname;
     root /var/www/html;
     index index.html index.htm;
 
