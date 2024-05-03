@@ -27,7 +27,6 @@ def do_pack():
         return None
     return file
 
-
 def do_deploy(archive_path):
     """Distributes an archive to a web server.
     """
@@ -38,7 +37,7 @@ def do_deploy(archive_path):
 
     if put(archive_path, "/tmp/{}".format(file)).failed is True:
         return False
-    if run("rm -rf /data/web_static/releases/{}/".
+    if sudo("rm -rf /data/web_static/releases/{}/".
            format(name)).failed is True:
         return False
     if sudo("mkdir -p /data/web_static/releases/{}/".
@@ -62,10 +61,10 @@ def do_deploy(archive_path):
         return False
     return True
 
-
 def deploy():
-    """Create and distribute an archive to a web server."""
-    file = do_pack()
-    if file is None:
+    """Creates and distributes an archive to a web server."""
+    archive_path = do_pack()
+    if archive_path is None:
         return False
-    return do_deploy(file)
+    return do_deploy(archive_path)
+
