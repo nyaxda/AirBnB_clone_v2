@@ -5,6 +5,8 @@ if ! command -v nginx &> /dev/null
 then
     sudo apt-get -y update
     sudo apt-get -y install nginx
+fi
+sudo mkdir -p /data/web_static/releases/test /data/web_static/shared
 echo "<!DOCTYPE html>
 <html>
 <head>
@@ -17,7 +19,7 @@ echo "<!DOCTYPE html>
 </html>" | sudo tee /data/web_static/releases/test/index.html >/dev/null
 target="/data/web_static/releases/test"
 link="/data/web_static/current"
-if [ -L "$link"]; then
+if [ -L "$link" ]; then
     sudo rm "$link"
 fi
 sudo ln -s "$target" "$link"
@@ -31,7 +33,7 @@ printf %s "server {
     root /var/www/html;
     index index.html index.htm;
 
-    location /hbh_static {
+    location /hbnb_static {
         alias /data/web_static/current;
         index index.html index.htm;
     }
