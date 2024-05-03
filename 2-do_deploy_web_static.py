@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 # Fabfile
-from fabric.api import env, run, put
+from fabric.api import env
+from fabric.api import run
+from fabric.api import put
 import os.path
 
-env.hosts = ['100.25.170.102',
-             '100.24.236.169'
-             ]
+env.hosts = ["100.25.170.102", "100.24.236.169"]
 
 
 def do_deploy(archive_path):
