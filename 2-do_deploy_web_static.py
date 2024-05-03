@@ -10,7 +10,7 @@ env.hosts = ['100.25.170.102',
 
 def do_deploy(archive_path):
     """Deploy an archive to the web servers."""
-    if os.path.isdir(archive_path) is False:
+    if os.path.isfile(archive_path) is False:
         return False
     result = put(archive_path, "/tmp/")
     if result.failed:
