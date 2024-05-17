@@ -1,6 +1,4 @@
 #!/usr/bin/python3
-# A script that starts a Flask web application. Listens on 0.0.0.0,
-# port 5000.
 
 from flask import Flask
 
