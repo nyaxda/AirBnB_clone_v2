@@ -16,15 +16,19 @@ def hbnb():
     """ Display HBNB """
     return "HBNB"
 
+
 @app.route('/c/<text>', strict_slashes=False)
 def c(text):
     """ Display HBNB """
-    return "c {}".format(text.replace('_', ' '))
+    return "C {}".format(text.replace('_', ' '))
 
-@app.route('/python/<text>', defaults={"text": "is cool"}, strict_slashes=False)
+
+@app.route('/python/<text>', defaults={"text": "is cool"},
+           strict_slashes=False)
 def python(text):
     """ Display HBNB """
     return "python {}".format(text.replace('_', ' '))
+
 
 if __name__ == '__main__':
     """ Main Function """
