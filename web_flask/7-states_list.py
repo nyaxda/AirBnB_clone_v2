@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 
 @app.teardown_appcontext
-def teardown():
+def teardown(exc):
     """Closes the storage on teardown"""
     storage.close()
 
