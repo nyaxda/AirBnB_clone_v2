@@ -98,3 +98,7 @@ class DBStorage():
         in the format of _FileStorage__objects
         """
         return self.all()
+
+    def close(self):
+        """desearlizes the JSON file to objects"""
+        reload()
