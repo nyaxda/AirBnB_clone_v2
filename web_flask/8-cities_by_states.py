@@ -9,6 +9,7 @@ from models import storage
 from flask import Flask
 from flask import render_template
 from models.state import State
+from models.city import City
 
 app = Flask(__name__)
 
@@ -20,7 +21,7 @@ def cities_by_states():
     States/cities are sorted by name.
     """
     states = sorted(storage.all(State).values(), key=lambda state: state.name)
-    states_with_cities = {state: (sorted(storage.all(City).values(), key=lambda city: city.name) for state in states)}
+    states_with_cities = {state: sorted([city for city in storage.all(City).values() if city.state_id == state.id], key=lambda city: city.name) for state in states}
     return render_template("8-cities_by_states.html", states=states_with_cities)
 
 
