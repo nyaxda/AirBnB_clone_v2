@@ -28,14 +28,14 @@ def states(id=None):
     """Displays an HTML page with a list of all states or a specific state."""
     states = storage.all("State")
     if id is None:
-        return render_template("states.html", states=states, state=None)
+        return render_template("9-states.html", states=states, state=None)
     else:
         state = None
         for state_obj in states.values():
             if state_obj.id == id:
                 state = state_obj
                 break
-        return render_template("states.html", states=None, state=state)
+        return render_template("9-states.html", states=None, state=state)
 
 
 @app.teardown_appcontext
