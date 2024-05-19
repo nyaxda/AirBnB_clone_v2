@@ -12,9 +12,7 @@ app = Flask(__name__)
 @app.route('/cities_by_states', strict_slashes=False)
 def cities():
     """Displays HTML page with states sorted from A to Z"""
-    states = sorted(storage.all(State).values(), key=lambda state: state.name)
-    for state in states:
-        state.cities = sorted(state.cities, key=lambda city: city.name)
+    states = sorted(storage.all(State).values())
     return render_template('8-cities_by_states.html',
                            states=states)
 
