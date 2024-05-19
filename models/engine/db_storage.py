@@ -101,4 +101,4 @@ class DBStorage():
 
     def close(self):
         """desearlizes the JSON file to objects"""
-        reload()
+        self.reload()
