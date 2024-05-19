@@ -32,8 +32,12 @@ def python(text="is cool"):
 
 @app.route('/number/<n>', strict_slashes=False)
 def number(n):
-    if n.isdigit():
-        return "{} is a number".format(n)
+    try:
+        n = int(n)
+        if type(n) is int:
+            return "{} is a number".format(n)
+    except ValueError:
+        pass
 
 
 if __name__ == '__main__':
