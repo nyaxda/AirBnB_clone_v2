@@ -19,8 +19,9 @@ def cities_by_states():
 
     States/cities are sorted by name.
     """
-    states = storage.all(State).values()
-    return render_template("8-cities_by_states.html", states=states)
+    states = sorted(storage.all(State).values(), key=lambda state: state.name)
+    states_with_cities = {state: (sorted(storage.all(City).values(), key=lambda city: city.name) for state in states)}
+    return render_template("8-cities_by_states.html", states=states_with_cities)
 
 
 @app.teardown_appcontext
