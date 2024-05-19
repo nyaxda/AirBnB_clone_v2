@@ -13,7 +13,8 @@ def cities():
     """Displays HTML page with states sorted from A to Z"""
     states = storage.all("State")
     cities = storage.all("City")
-    return render_template('8-cities_by_states.html', states=states, cities=cities)
+    return render_template('8-cities_by_states.html',
+                           states=states, cities=cities)
 
 
 @app.teardown_appcontext
