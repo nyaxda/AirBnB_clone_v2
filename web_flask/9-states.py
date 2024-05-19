@@ -22,17 +22,20 @@ def cities_by_states():
     return render_template("8-cities_by_states.html", states=states)
 
 
+@app.route("/states", strict_slashes=False)
 @app.route("/states/<id>", strict_slashes=False)
-def state_id(id):
-    """Displays an HTML page with a state of certain id."""
+def states(id=None):
+    """Displays an HTML page with a list of all states or a specific state."""
     states = storage.all("State")
-    state = None
-    for state_obj in states.values():
-        if state_obj.id == id:
-            state = state_obj
-            break
+    if id is None:
+        return render_template("states.html", states=states, state=None)
     else:
-        return render_template("9-states.html", state=state)
+        state = None
+        for state_obj in states.values():
+            if state_obj.id == id:
+                state = state_obj
+                break
+        return render_template("states.html", states=None, state=state)
 
 
 @app.teardown_appcontext
